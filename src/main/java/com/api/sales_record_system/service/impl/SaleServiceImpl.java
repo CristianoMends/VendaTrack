@@ -1,8 +1,11 @@
 package com.api.sales_record_system.service.impl;
 
 import com.api.sales_record_system.dto.CreateSaleDto;
+import com.api.sales_record_system.dto.SaleView;
+import com.api.sales_record_system.dto.SearchDto;
 import com.api.sales_record_system.dto.UpdateSaleDto;
 import com.api.sales_record_system.entity.Sale;
+import com.api.sales_record_system.exception.BusinessException;
 import com.api.sales_record_system.repository.SaleRepository;
 import com.api.sales_record_system.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +26,39 @@ public class SaleServiceImpl implements SaleService {
     public Sale saveSale(CreateSaleDto createSaleDto) {
         Sale sale = toEntity(createSaleDto);
         return saleRepository.save(sale);
-    }/*
-
-    @Override
-    public List<Sale> getSalesByDate(LocalDateTime initDate, LocalDateTime finalDate) {
-        return null;
     }
 
     @Override
-    public Sale updateSale(UpdateSaleDto updateSaleDto) {
-        return null;
+    public List<SaleView> searchSales(SearchDto searchDto) {
+        var now = LocalDateTime.now();
+
+        var result = saleRepository.findByFilters(
+                searchDto.getDescription(),
+                searchDto.getPaymentMethod(),
+                searchDto.getMinPrice(),
+                searchDto.getMaxPrice(),
+                searchDto.getStartDate(),
+                searchDto.getEndDate()
+                );
+        return result.stream().map(this::toView).toList();
+    }
+
+
+
+    @Override
+    public boolean deleteSale(Long id) {
+        if(saleRepository.findById(id).isEmpty()){
+            throw new BusinessException("Sale Not Found");
+        }
+        saleRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public Sale deleteSale(Long id) {
-        return null;
+    public List<SaleView> getAll() {
+        return saleRepository.findAll().stream().map(this::toView).toList();
     }
 
-    @Override
-    public List<Sale> getAll() {
-        return saleRepository.findAll();
-    }*/
 
     private Sale toEntity(CreateSaleDto createSaleDto){
         ZoneId saoPauloZone = ZoneId.of("America/Sao_Paulo");
@@ -54,6 +69,14 @@ public class SaleServiceImpl implements SaleService {
                 createSaleDto.getDescription(),
                 createSaleDto.getPaymentMethod(),
                 localDateTime
+        );
+    }
+    private SaleView toView(Sale sale){
+        return new SaleView(
+                sale.getPrice(),
+                sale.getDescription(),
+                sale.getPaymentMethod(),
+                sale.getDate()
         );
     }
 }

@@ -1,6 +1,8 @@
 package com.api.sales_record_system.service;
 
 import com.api.sales_record_system.dto.CreateSaleDto;
+import com.api.sales_record_system.dto.SaleView;
+import com.api.sales_record_system.dto.SearchDto;
 import com.api.sales_record_system.dto.UpdateSaleDto;
 import com.api.sales_record_system.entity.Sale;
 
@@ -9,12 +11,13 @@ import java.util.List;
 
 public interface SaleService {
     Sale saveSale(CreateSaleDto createSaleDto);
-    /*List<Sale> getSalesByDate(LocalDateTime initDate, LocalDateTime finalDate);
 
-    Sale updateSale(UpdateSaleDto updateSaleDto);
+    List<SaleView> searchSales(SearchDto searchDto);
 
-    Sale deleteSale(Long id);
+    //Sale updateSale(UpdateSaleDto updateSaleDto);
 
-    List<Sale> getAll();*/
+    boolean deleteSale(Long id);
+
+    List<SaleView> getAll();
 
 }
