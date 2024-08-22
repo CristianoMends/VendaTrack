@@ -9,24 +9,25 @@ import java.time.LocalDateTime;
 
 public class SearchDto {
 
-    private String description;
+    private String description = "";
 
     @NotNull(message = "O preço mínimo não pode ser nulo.")
     @DecimalMin(value = "0.0", inclusive = true, message = "O preço mínimo deve ser maior ou igual a zero.")
-    private Double minPrice;
+    private Double minPrice = 0.0;
 
     @NotNull(message = "O preço máximo não pode ser nulo.")
     @DecimalMin(value = "0.0", inclusive = false, message = "O preço máximo deve ser maior que zero.")
-    private Double maxPrice;
+    private Double maxPrice = Double.MAX_VALUE;
 
     @NotNull(message = "A data de início não pode ser nula.")
-    private LocalDateTime startDate;
+    private LocalDateTime startDate = LocalDateTime.MIN;
 
     @NotNull(message = "A data de término não pode ser nula.")
     @FutureOrPresent(message = "A data de término deve ser no presente ou no futuro.")
-    private LocalDateTime endDate;
+    private LocalDateTime endDate = LocalDateTime.MAX;
 
-    private PaymentMethod paymentMethod;
+    @NotNull(message = "O método de pagamento não pode ser nulo")
+    private PaymentMethod paymentMethod = null;
 
     public SearchDto() {
     }
@@ -90,13 +91,4 @@ public class SearchDto {
         this.paymentMethod = paymentMethod;
     }
 
-    @AssertTrue(message = "O preço máximo deve ser maior que o preço mínimo.")
-    public boolean isMaxPriceGreaterThanMinPrice() {
-        return maxPrice == null || minPrice == null || maxPrice > minPrice;
-    }
-
-    @AssertTrue(message = "A data de término deve ser posterior à data de início.")
-    public boolean isEndDateAfterStartDate() {
-        return endDate == null || startDate == null || endDate.isAfter(startDate);
-    }
 }

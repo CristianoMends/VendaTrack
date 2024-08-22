@@ -7,7 +7,8 @@ public enum PaymentMethod {
     PIX,
     DEBIT,
     CREDIT,
-    MONEY;
+    MONEY,
+    UNDEFINED;
 
     @JsonCreator
     public static PaymentMethod fromString(String value) {

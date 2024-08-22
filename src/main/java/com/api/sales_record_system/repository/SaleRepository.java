@@ -16,13 +16,10 @@ import java.util.List;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
-    @Query(nativeQuery = true,value="SELECT * FROM sale WHERE date BETWEEN ?1 AND ?2")
-    List<Sale> findAllByDate(LocalDateTime initDate, LocalDateTime finalDate);
-
     @Query(nativeQuery = true, value =
             "SELECT * FROM sale " +
                     "WHERE description LIKE %?1% " +
-                    "AND (?2 IS NULL OR payment_method = ?2) " +
+                    "AND (?2 != 5 OR payment_method = ?2) " +
                     "AND (price BETWEEN ?3 AND ?4) " +
                     "AND (date BETWEEN ?5 AND ?6)")
     List<Sale> findByFilters(
@@ -33,6 +30,10 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             LocalDateTime initDate,
             LocalDateTime finalDate
     );
+
+    @Override
+    @Query(nativeQuery = true, value = "SELECT * FROM sale ORDER BY date DESC")
+    List<Sale> findAll();
 
 
 

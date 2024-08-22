@@ -38,4 +38,11 @@ public class CreateSaleDto {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public CreateSaleDto(){}
+    public CreateSaleDto(Double price, String description, PaymentMethod paymentMethod) {
+        this.price = price;
+        this.description = description;
+        this.paymentMethod = paymentMethod;
+    }
 }

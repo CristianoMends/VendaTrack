@@ -25,6 +25,9 @@ public class Sale {
         this.date = date;
     }
 
+    public Sale(long l, String pizzaGrande, double v, LocalDateTime of, PaymentMethod paymentMethod) {
+    }
+
     public Long getId() {return id;}
     public void setId(Long id) {
         this.id = id;

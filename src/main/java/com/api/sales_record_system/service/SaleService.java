@@ -14,7 +14,7 @@ public interface SaleService {
 
     List<SaleView> searchSales(SearchDto searchDto);
 
-    //Sale updateSale(UpdateSaleDto updateSaleDto);
+    Sale updateSale(Long saleId, UpdateSaleDto updateSaleDto);
 
     boolean deleteSale(Long id);
 
