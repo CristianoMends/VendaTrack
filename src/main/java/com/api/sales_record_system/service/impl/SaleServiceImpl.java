@@ -7,7 +7,6 @@ import com.api.sales_record_system.dto.UpdateSaleDto;
 import com.api.sales_record_system.entity.Sale;
 import com.api.sales_record_system.enums.PaymentMethod;
 import com.api.sales_record_system.exception.BusinessException;
-import com.api.sales_record_system.exception.GlobalException;
 import com.api.sales_record_system.repository.SaleRepository;
 import com.api.sales_record_system.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,25 +24,39 @@ public class SaleServiceImpl implements SaleService {
     private SaleRepository saleRepository;
 
     @Override
-    public Sale saveSale(CreateSaleDto createSaleDto) {
+    public boolean saveSale(CreateSaleDto createSaleDto) {
         Sale sale = toEntity(createSaleDto);
-        return saleRepository.save(sale);
+        var id = saleRepository.save(sale).getId();
+        var savedSale = saleRepository.findById(id).get();
+        sale.getItens().forEach(i ->{
+            i.setSale(savedSale);
+        });
+
+        saleRepository.save(savedSale);
+
+        return true;
     }
 
     @Override
     public List<SaleView> searchSales(SearchDto searchDto) {
-        var now = LocalDateTime.now();
+        var now = getZonedDateTimeNow();
 
         if (searchDto.getDescription() == null){
             searchDto.setDescription("");
         }
-
-        if (searchDto.getStartDate() == null || searchDto.getStartDate().isAfter(searchDto.getEndDate())){
-            searchDto.setStartDate(LocalDateTime.of(2000,1,1,5,0));
-        }
         if (searchDto.getEndDate() == null){
             searchDto.setEndDate(now);
         }
+        if (searchDto.getEndDate().isAfter(now)){
+            searchDto.setEndDate(now);
+        }
+        if (searchDto.getStartDate() == null){
+            searchDto.setStartDate(getZonedDateTimeInit());
+        }
+        if (searchDto.getStartDate().isAfter(searchDto.getEndDate())){
+            searchDto.setStartDate(getZonedDateTimeInit());
+        }
+
         if (searchDto.getMinPrice() > searchDto.getMaxPrice() || searchDto.getMinPrice() == null){
             searchDto.setMinPrice(Double.MIN_VALUE);
         }
@@ -73,13 +86,6 @@ public class SaleServiceImpl implements SaleService {
             throw new BusinessException("Venda com ID " + saleId + " não encontrada.");
         }
         Sale sale = saleOptional.get();
-
-        if (updateSaleDto.getDescription() != null) {
-            sale.setDescription(updateSaleDto.getDescription());
-        }
-        if (updateSaleDto.getPrice() != null) {
-            sale.setPrice(updateSaleDto.getPrice());
-        }
         if (updateSaleDto.getPaymentMethod() != null) {
             sale.setPaymentMethod(updateSaleDto.getPaymentMethod());
         }
@@ -104,21 +110,28 @@ public class SaleServiceImpl implements SaleService {
 
 
     private Sale toEntity(CreateSaleDto createSaleDto) {
-        ZoneId saoPauloZone = ZoneId.of("America/Sao_Paulo");
-        ZonedDateTime saoPauloDateTime = ZonedDateTime.now(saoPauloZone);
-        LocalDateTime localDateTime = saoPauloDateTime.toLocalDateTime();
         return new Sale(
-                createSaleDto.getPrice(),
-                createSaleDto.getDescription(),
+                createSaleDto.getItens(),
                 createSaleDto.getPaymentMethod(),
-                localDateTime
+                getZonedDateTimeNow()
         );
     }
 
+    private LocalDateTime getZonedDateTimeNow(){
+        ZoneId saoPauloZone = ZoneId.of("America/Sao_Paulo");
+        ZonedDateTime saoPauloDateTime = ZonedDateTime.now(saoPauloZone);
+        return saoPauloDateTime.toLocalDateTime();
+    }
+
+    private LocalDateTime getZonedDateTimeInit(){
+        ZoneId saoPauloZone = ZoneId.of("America/Sao_Paulo");
+        ZonedDateTime saoPauloDateTime = ZonedDateTime.of(LocalDateTime.of(2000,1,1,5,0),saoPauloZone);
+        return saoPauloDateTime.toLocalDateTime();
+    }
     private SaleView toView(Sale sale) {
         return new SaleView(
-                sale.getPrice(),
-                sale.getDescription(),
+                sale.getId(),
+                sale.getItens(),
                 sale.getPaymentMethod(),
                 sale.getDate()
         );

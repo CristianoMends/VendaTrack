@@ -1,38 +1,39 @@
 package com.api.sales_record_system.dto;
 
+import com.api.sales_record_system.entity.SaleItem;
 import com.api.sales_record_system.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SaleView {
 
-    private Double price;
-    private String description;
+    private Long id;
+    private List<SaleItem> itens;
     private PaymentMethod paymentMethod;
-
     private LocalDateTime date;
 
-    public SaleView(Double price, String description, PaymentMethod paymentMethod, LocalDateTime date) {
-        this.price = price;
-        this.description = description;
+    public SaleView(Long id, List<SaleItem> itens, PaymentMethod paymentMethod, LocalDateTime date) {
+        this.id = id;
+        this.itens = itens;
         this.paymentMethod = paymentMethod;
         this.date = date;
     }
 
-    public Double getPrice() {
-        return price;
+    public List<SaleItem> getItens() {
+        return itens;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setItens(List<SaleItem> itens) {
+        this.itens = itens;
     }
 
-    public String getDescription() {
-        return description;
+    public Long getId() {
+        return id;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public PaymentMethod getPaymentMethod() {

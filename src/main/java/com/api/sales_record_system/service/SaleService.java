@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SaleService {
-    Sale saveSale(CreateSaleDto createSaleDto);
+    boolean saveSale(CreateSaleDto createSaleDto);
 
     List<SaleView> searchSales(SearchDto searchDto);
 

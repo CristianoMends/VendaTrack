@@ -4,6 +4,7 @@ import com.api.sales_record_system.enums.PaymentMethod;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity()
 @Table()
@@ -11,21 +12,35 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double price;
-    private String description;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sale")
+    private List<SaleItem> itens;
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private LocalDateTime date;
 
     public Sale(){}
 
-    public Sale(Double price, String description, PaymentMethod paymentMethod, LocalDateTime date) {
-        this.price = price;
-        this.description = description;
+    public Sale(List<SaleItem> itens, PaymentMethod paymentMethod, LocalDateTime date) {
+        this.itens = itens;
         this.paymentMethod = paymentMethod;
         this.date = date;
+
     }
 
-    public Sale(long l, String pizzaGrande, double v, LocalDateTime of, PaymentMethod paymentMethod) {
+    public Double getTotal(){
+        Double total = 0.0;
+        for (SaleItem i : this.itens) {
+            total += i.getTotal();
+        }
+        return total;
+    }
+
+    public List<SaleItem> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<SaleItem> itens) {
+        this.itens = itens;
     }
 
     public Long getId() {return id;}
@@ -41,18 +56,6 @@ public class Sale {
         this.paymentMethod = paymentMethod;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
     public LocalDateTime getDate() {
         return date;
     }

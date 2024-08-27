@@ -21,7 +21,10 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
                     "WHERE description LIKE %?1% " +
                     "AND (?2 != 5 OR payment_method = ?2) " +
                     "AND (price BETWEEN ?3 AND ?4) " +
-                    "AND (date BETWEEN ?5 AND ?6)")
+                    "AND (date BETWEEN ?5 AND ?6) " +
+                    "ORDER BY date DESC"
+    )
+
     List<Sale> findByFilters(
             String description,
             PaymentMethod paymentMethod,
@@ -30,10 +33,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             LocalDateTime initDate,
             LocalDateTime finalDate
     );
-
-    @Override
-    @Query(nativeQuery = true, value = "SELECT * FROM sale ORDER BY date DESC")
-    List<Sale> findAll();
 
 
 

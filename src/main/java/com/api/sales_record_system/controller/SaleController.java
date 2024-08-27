@@ -1,9 +1,6 @@
 package com.api.sales_record_system.controller;
 
-import com.api.sales_record_system.dto.CreateSaleDto;
-import com.api.sales_record_system.dto.SaleView;
-import com.api.sales_record_system.dto.SearchDto;
-import com.api.sales_record_system.dto.UpdateSaleDto;
+import com.api.sales_record_system.dto.*;
 import com.api.sales_record_system.entity.Sale;
 import com.api.sales_record_system.service.SaleService;
 import org.antlr.v4.runtime.atn.SemanticContext;
@@ -15,43 +12,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
-@RequestMapping("sales")
+@RequestMapping("sale")
 public class SaleController {
 
     @Autowired
     private SaleService saleService;
 
     @PostMapping()
-    public ResponseEntity<String> registerSale(
+    @CrossOrigin()
+    public ResponseEntity<ResponseDto> registerSale(
             @RequestBody @Validated CreateSaleDto sale
             ){
         saleService.saveSale(sale);
-        return ResponseEntity.status(HttpStatus.CREATED).body("sale registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto("sale registered successfully", HttpStatus.OK.value()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSale(
+    public ResponseEntity<ResponseDto> deleteSale(
             @PathVariable Long id
     ){
         saleService.deleteSale(id);
-        return ResponseEntity.status(HttpStatus.OK).body("sale deleted successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("sale deleted successfully",HttpStatus.OK.value()));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateSale(@PathVariable Long id, @RequestBody UpdateSaleDto updateSaleDto){
+    public ResponseEntity<ResponseDto> updateSale(@PathVariable Long id, @RequestBody UpdateSaleDto updateSaleDto){
         saleService.updateSale(id, updateSaleDto);
-        return ResponseEntity.status(HttpStatus.OK).body("sale updated successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("sale updated successfully",HttpStatus.OK.value()));
     }
 
     @GetMapping()
+    @CrossOrigin()
     public ResponseEntity<List<SaleView>> getAllSales(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(saleService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(saleService.getAll());
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
+    @CrossOrigin()
     public ResponseEntity<List<SaleView>> searchSales(@RequestBody SearchDto searchDto) {
         List<SaleView> results = saleService.searchSales(searchDto);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
 
