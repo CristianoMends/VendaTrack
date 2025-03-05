@@ -37,6 +37,10 @@ spring:
     console:
       enabled: true
       path: /h2
+security:
+  config:
+    key: qwe123
+    expiration: 3
 
 logging:
   level:
