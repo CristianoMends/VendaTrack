@@ -1,0 +1,22 @@
+fieldset{
+    margin-top: 25px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+    border: none;
+    box-shadow: 3px 2px 5px #444;
+}
+fieldset legend{
+    font-weight: bold;
+}
+input, button{
+    border: none;
+    box-shadow: 3px 2px 5px #444;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+button:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}
