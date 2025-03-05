@@ -1,52 +1,64 @@
 package com.api.sales_record_system.domain.sale;
 
+import com.api.sales_record_system.adapters.out.entities.JpaSaleEntity;
 import com.api.sales_record_system.domain.saleItem.SaleItem;
 import com.api.sales_record_system.domain.enums.PaymentMethod;
-import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity()
-@Table()
 public class Sale {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "sale")
-    private List<SaleItem> itens;
-    @Enumerated(EnumType.STRING)
+    private List<SaleItem> items;
     private PaymentMethod paymentMethod;
     private LocalDateTime date;
 
-    public Sale(){}
+    public Sale() {
+    }
 
-    public Sale(List<SaleItem> itens, PaymentMethod paymentMethod, LocalDateTime date) {
-        this.itens = itens;
+    public Sale(List<SaleItem> items, PaymentMethod paymentMethod, LocalDateTime date) {
+        this.items = items;
         this.paymentMethod = paymentMethod;
         this.date = date;
 
     }
 
-    public Double getTotal(){
-        Double total = 0.0;
-        for (SaleItem i : this.itens) {
-            total += i.getTotal();
+    public Sale(JpaSaleEntity saved) {
+        this.id = saved.getId();
+        this.date = saved.getDate();
+        this.paymentMethod = saved.getPaymentMethod();
+
+        if (saved.getItems() == null) return;
+        this.items = saved.getItems()
+                .stream()
+                .map(SaleItem::new).toList();
+    }
+
+    public BigDecimal getTotal() {
+        var tot = BigDecimal.valueOf(0);
+        for (var a : this.items) {
+            tot.add(a.getTotal());
         }
-        return total;
+        return tot;
     }
 
-    public List<SaleItem> getItens() {
-        return itens;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setItens(List<SaleItem> itens) {
-        this.itens = itens;
-    }
-
-    public Long getId() {return id;}
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<SaleItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<SaleItem> items) {
+        this.items = items;
     }
 
     public PaymentMethod getPaymentMethod() {
@@ -60,7 +72,18 @@ public class Sale {
     public LocalDateTime getDate() {
         return date;
     }
+
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Sale{" +
+                "id=" + id +
+                ", items=" + items +
+                ", paymentMethod=" + paymentMethod +
+                ", date=" + date +
+                '}';
     }
 }

@@ -2,6 +2,7 @@ package com.api.sales_record_system.domain.sale;
 
 import com.api.sales_record_system.domain.saleItem.SaleItem;
 import com.api.sales_record_system.domain.enums.PaymentMethod;
+import com.api.sales_record_system.domain.saleItem.ViewSaleItemDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,22 +10,22 @@ import java.util.List;
 public class ViewSaleDto {
 
     private Long id;
-    private List<SaleItem> itens;
+    private List<ViewSaleItemDto> itens;
     private PaymentMethod paymentMethod;
     private LocalDateTime date;
 
     public ViewSaleDto(Long id, List<SaleItem> itens, PaymentMethod paymentMethod, LocalDateTime date) {
         this.id = id;
-        this.itens = itens;
+        this.itens = itens.stream().map(SaleItem::toView).toList();
         this.paymentMethod = paymentMethod;
         this.date = date;
     }
 
-    public List<SaleItem> getItens() {
+    public List<ViewSaleItemDto> getItens() {
         return itens;
     }
 
-    public void setItens(List<SaleItem> itens) {
+    public void setItens(List<ViewSaleItemDto> itens) {
         this.itens = itens;
     }
 

@@ -2,20 +2,18 @@ package com.api.sales_record_system.domain.item;
 
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
+
 public class CreateItemDto {
 
-    @NotNull(message = "O preço não pode ser nulo.")
-    @DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero.")
-    @Digits(integer = 10, fraction = 2, message = "O preço deve ter no máximo 10 dígitos no total, com no máximo 2 casas decimais.")
-    private Double price;
-    @NotBlank(message = "A descrição não pode estar em branco.")
+    private BigDecimal price;
     @Size(max = 255, message = "A descrição não pode ter mais de 255 caracteres.")
     private String description;
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -28,7 +26,7 @@ public class CreateItemDto {
     }
 
     public CreateItemDto(){}
-    public CreateItemDto(Double price, String description) {
+    public CreateItemDto(BigDecimal price, String description) {
         this.price = price;
         this.description = description;
     }

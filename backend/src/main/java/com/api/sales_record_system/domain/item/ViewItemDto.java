@@ -1,23 +1,27 @@
 package com.api.sales_record_system.domain.item;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ViewItemDto {
 
-    private UUID id;
-    private Double price;
+    private Long id;
+    private BigDecimal price;
     private String description;
 
-    public UUID getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
-    public void setPrice(Double price) {
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -29,8 +33,10 @@ public class ViewItemDto {
         this.description = description;
     }
 
-    public ViewItemDto(){}
-    public ViewItemDto(UUID id, Double price, String description) {
+    public ViewItemDto() {
+    }
+
+    public ViewItemDto(Long id, BigDecimal price, String description) {
         this.id = id;
         this.price = price;
         this.description = description;

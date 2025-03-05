@@ -1,6 +1,5 @@
 package com.api.sales_record_system.domain.sale;
 
-import com.api.sales_record_system.domain.saleItem.SaleItem;
 import com.api.sales_record_system.domain.enums.PaymentMethod;
 import jakarta.validation.constraints.*;
 
@@ -10,24 +9,16 @@ import java.util.List;
 public class CreateSaleDto {
 
     @NotNull(message = "itens não pode ser nulo.")
-    private List<SaleItem> itens;
+    private List<CreateSaleItemDto> itens;
     private LocalDateTime date;
     @NotNull(message = "O método de pagamento não pode ser nulo.")
     private PaymentMethod paymentMethod;
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public List<SaleItem> getItens() {
+    public List<CreateSaleItemDto> getItens() {
         return itens;
     }
 
-    public void setItens(List<SaleItem> itens) {
+    public void setItens(List<CreateSaleItemDto> itens) {
         this.itens = itens;
     }
 
@@ -39,9 +30,17 @@ public class CreateSaleDto {
         this.date = date;
     }
 
-    public CreateSaleDto(){}
-    public CreateSaleDto(List<SaleItem> itens, PaymentMethod paymentMethod) {
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public CreateSaleDto(List<CreateSaleItemDto> itens, LocalDateTime date, PaymentMethod paymentMethod) {
         this.itens = itens;
+        this.date = date;
         this.paymentMethod = paymentMethod;
     }
 }

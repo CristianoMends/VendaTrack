@@ -1,29 +1,60 @@
 package com.api.sales_record_system.domain.item;
 
-import jakarta.persistence.*;
+import com.api.sales_record_system.adapters.out.entities.JpaItemEntity;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
-@Entity
+
 public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
-    private Double price;
+
+    private Long id;
+    private BigDecimal price;
     private String description;
 
-    public Item() {}
-    public Item(Double price, String description) {
+    public Item() {
+    }
+
+    public Item(BigDecimal price, String description) {
+        this.price = price;
+        this.description = description;
+    }
+    public Item(JpaItemEntity item) {
+        if (item != null) {
+            this.id = item.getId();
+            this.description = item.getDescription();
+            this.price = item.getPrice();
+        }
+    }
+
+
+    public Item(Long id, String description, BigDecimal price) {
+        this.id = id;
         this.price = price;
         this.description = description;
     }
 
-    public Double getPrice() {
+    public ViewItemDto toView() {
+        return new ViewItemDto(
+                getId(),
+                getPrice(),
+                getDescription()
+        );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -35,11 +66,12 @@ public class Item {
         this.description = description;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
