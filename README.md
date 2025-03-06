@@ -1,4 +1,4 @@
-# Arquitetura Hexagoal 💻
+# Arquitetura Hexagonal 💻
 
 <div align="center">
     <img src="https://engsoftmoderna.info/artigos/figs/hex-ports-adapters.svg" height="250px">
