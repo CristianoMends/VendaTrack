@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/VendaTrack.iml" filepath="$PROJECT_DIR$/.idea/VendaTrack.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/VendasTrack.main.iml" filepath="$PROJECT_DIR$/.idea/modules/VendasTrack.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.api.VendasTrack.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.api.VendasTrack.main.iml" />
     </modules>
   </component>
 </project>
